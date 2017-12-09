@@ -2,60 +2,96 @@
 /* Programa: ejercicio1     Fecha:             */
 /* Autores:                                    */
 /*                                             */
-/* Programa que genera numeros aleatorios      */
-/* entre dos numeros dados                     */
+/* Programa que comprueba el funcionamiento de */
+/* la busqueda lineal                          */
 /*                                             */
 /* Entrada: Linea de comandos                  */
-/* -limInf: limite inferior                    */
-/* -limSup: limite superior                    */
-/* -numN: cantidad de numeros                  */
+/*   -tamanio: numero elementos diccionario    */
+/*   -clave:   clave a buscar                  */
+/*                                             */
 /* Salida: 0: OK, -1: ERR                      */
 /***********************************************/
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+#include<time.h>
+
 #include "permutaciones.h"
+#include "busqueda.h"
 
 int main(int argc, char** argv)
 {
-  int i;
-  unsigned int inf, sup, num, j;
+  int i, nob, pos;
+  unsigned int clave, tamanio;
+  PDICC pdicc;
+  int *perm;
 
   srand(time(NULL));
 
-  if (argc != 7) {
+  if (argc != 5) {
     fprintf(stderr, "Error en los parametros de entrada:\n\n");
-    fprintf(stderr, "%s -limInf <int> -limSup <int> -numN <int>\n", argv[0]);
+    fprintf(stderr, "%s -tamanio <int> -clave <int>\n", argv[0]);
     fprintf(stderr, "Donde:\n");
-    fprintf(stderr, " -limInf : Limite inferior.\n");
-    fprintf(stderr, " -limSup : Limite superior.\n");
-    fprintf(stderr, " -numN : Cantidad de numeros a generar.\n");
+    fprintf(stderr, " -tamanio : numero elementos de la tabla.\n");
+    fprintf(stderr, " -clave : clave a buscar.\n");
     exit(-1);
   }
-  printf("Practica numero 1, apartado 1\n");
-  printf("Realizada por: Victoria Pelayo e Ignacio Rabuñal\n");
-  printf("Grupo: 1273\n");
+
+  printf("Practica numero 3, apartado 1\n");
+  printf("Realizada por: Vuestros nombres\n");
+  printf("Grupo: Vuestro grupo\n");
 
   /* comprueba la linea de comandos */
   for(i = 1; i < argc; i++) {
-    if (strcmp(argv[i], "-limInf") == 0) {
-      inf = atoi(argv[++i]);
-    } else if (strcmp(argv[i], "-limSup") == 0) {
-      sup = atoi(argv[++i]);
-    } else if (strcmp(argv[i], "-numN") == 0) {
-      num = atoi(argv[++i]);
+    if (strcmp(argv[i], "-tamanio") == 0) {
+      tamanio = atoi(argv[++i]);
+    } else if (strcmp(argv[i], "-clave") == 0) {
+      clave = atoi(argv[++i]);
     } else {
       fprintf(stderr, "Parametro %s es incorrecto\n", argv[i]);
     }
   }
 
-  /* imprimimos los datos */
-  for(j = 0; j < num; j++) { 
-    printf("%d\n", aleat_num(inf, sup));
+  pdicc = ini_diccionario(tamanio,ORDENADO);
+
+  if (pdicc == NULL) {
+    /* error */
+    printf("Error: No se puede Iniciar el diccionario\n");
+    exit(-1);
   }
+
+  perm = genera_perm(tamanio);
+
+  if (perm == NULL) {
+    /* error */
+    printf("Error: No hay memoria\n");
+    libera_diccionario(pdicc);
+    exit(-1);
+  }
+
+  nob = insercion_masiva_diccionario(pdicc, perm, tamanio);
+
+  if (nob == ERR) {
+    /* error */
+    printf("Error: No se puede crear el diccionario memoria\n");
+    free(perm);
+    libera_diccionario(pdicc);
+    exit(-1);
+  }
+
+  nob = busca_diccionario(pdicc,clave,&pos,bbin);
+
+  if(nob >= 0) {
+    printf("Clave %d encontrada en la posicion %d en %d op. basicas\n",clave,pos,nob);
+  } else if (nob==NO_ENCONTRADO) {
+    printf("La clave %d no se encontro en la tabla\n",clave);
+  } else {
+    printf("Error al buscar la clave %d\n",clave);
+  }
+
+  free(perm);
+  libera_diccionario(pdicc);
 
   return 0;
 }
-

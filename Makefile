@@ -7,7 +7,7 @@ CC = gcc -ansi -pedantic
 #CFLAGS = -Wall
 CFLAGS = -Wall -g
 #CFLAGS = -Wall -O3
-EXE = ejercicio1 ejercicio2 ejercicio3 ejercicio4 ejercicio5
+EXE = ejercicio2
 
 all : $(EXE)
 
@@ -15,12 +15,12 @@ all : $(EXE)
 clean :
 	rm -f *.o core $(EXE)
 
-$(EXE) : % : %.o ordenacion.o tiempos.o permutaciones.o
+$(EXE) : % : %.o ordenacion.o tiempos.o permutaciones.o busqueda.o
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -o $@ $@.o ordenacion.o tiempos.o permutaciones.o
+	$(CC) $(CFLAGS) -o $@ $@.o ordenacion.o tiempos.o permutaciones.o busqueda.o
 
 permutaciones.o : permutaciones.c permutaciones.h
 	@echo "#---------------------------"
@@ -43,23 +43,29 @@ permutaciones.o : permutaciones.c permutaciones.h
 	@echo "# Ha cambiado $<"
 	$(CC) $(CFLAGS) -c $<
 
-ejercicio1_test:
-	@echo Ejecutando ejercicio1
-	@./ejercicio1 -limInf 1 -limSup 5 -numN 10
+busqueda.o : busqueda.c busqueda.h
+	 @echo "#---------------------------"
+	 @echo "# Generando $@"
+	 @echo "# Depende de $^"
+	 @echo "# Ha cambiado $<"
+	 $(CC) $(CFLAGS) -c $<
 
-ejercicio2_test:
-	@echo Ejecutando ejercicio2
-	@./ejercicio2 -tamanio 4 -numP 5
+#
+#ejercicio1_test:
+#@echo Ejecutando ejercicio1	#@./ejercicio1 -limInf 1 -limSup 5 -numN 10
 
-ejercicio3_test:
-	@echo Ejecutando ejercicio3
-	@./ejercicio3 -tamanio 1 -numP 5
+#ejercicio2_test:
+#	@echo Ejecutando ejercicio2
+#	@./ejercicio2 -tamanio 4 -numP 5
 
-ejercicio4_test:
-	@echo Ejecutando ejercicio4
-	@./ejercicio4 -tamanio 10
+#ejercicio3_test:
+#	@echo Ejecutando ejercicio3
+#	@./ejercicio3 -tamanio 1 -numP 5
 
-ejercicio5_test:
-	@echo Ejecutando ejercicio5
-	@./ejercicio5 -num_min 1 -num_max 5 -incr 1 -numP 5 -fichSalida ejercicio5.txt
+#ejercicio4_test:
+#	@echo Ejecutando ejercicio4
+#	@./ejercicio4 -tamanio 10
 
+#ejercicio5_test:
+#	@echo Ejecutando ejercicio5
+#	@./ejercicio5 -num_min 1 -num_max 5 -incr 1 -numP 5 -fichSalida ejercicio5.txt
