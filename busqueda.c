@@ -3,7 +3,7 @@
  * Descripcion: Implementacion funciones para busqueda
  *
  * Fichero: busqueda.c
- * Autor: Carlos Aguirre
+ * Autores: Victoria Playo e Ignacio Rabuñal
  * Version: 1.0
  * Fecha: 11-11-2016
  *
@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <assert.h>
 
 /**
  *  Funciones de geracion de claves
@@ -60,6 +59,11 @@ void generador_claves_potencial(int *claves, int n_claves, int max)
   return;
 }
 
+/**
+ *  Funcion: ini_diccionario
+ *               Esta funcion crea un diccionario, de tamaño tamanio y de orden
+ *                el especificado por orden
+ */
 PDICC ini_diccionario (int tamanio, char orden){
   PDICC pdicc = NULL;
 
@@ -84,6 +88,10 @@ PDICC ini_diccionario (int tamanio, char orden){
   return pdicc;
 }
 
+/**
+ *  Funcion: libera_diccionario
+ *               Libera la memoria reservada para el diccionario pasado
+ */
 void libera_diccionario(PDICC pdicc){
   if(pdicc == NULL)
     return;
@@ -97,6 +105,11 @@ void libera_diccionario(PDICC pdicc){
   free(pdicc);
 }
 
+/**
+ *  Funcion: inserta_diccionario
+ *               Inserta una clave(que pasamos como argumento)
+ *                en el diccionario
+ */
 int inserta_diccionario(PDICC pdicc, int clave){
   int ob = 0;
   int i = 0;
@@ -123,6 +136,10 @@ int inserta_diccionario(PDICC pdicc, int clave){
   return ob;
 }
 
+/**
+ *  Funcion: insercion_masiva_diccionario
+ *                 Inserta un conjunto de claves en el diccionario
+ */
 int insercion_masiva_diccionario (PDICC pdicc,int *claves, int n_claves){
   int i;
   int ob = 0;
@@ -134,14 +151,23 @@ int insercion_masiva_diccionario (PDICC pdicc,int *claves, int n_claves){
   return ob;
 }
 
+/**
+ *  Funcion: busca_diccionario
+ *               Busca una clave en el diccionario, especificaremos el metodo
+ */
 int busca_diccionario(PDICC pdicc, int clave, int *ppos, pfunc_busqueda metodo){
-	if(pdicc == NULL)
+	if(pdicc == NULL){
     return NO_ENCONTRADO;
+  }
+
 
   return metodo(pdicc->tabla, 0, pdicc->n_datos, clave, ppos);
 }
 
-
+/**
+ *  Funcion: bbin
+ *               Busqueda binaria de una clave en una tabla
+ */
 int bbin(int *tabla,int P,int U,int clave,int *ppos){
   int ob = 0;
   int m = 0;
@@ -166,6 +192,10 @@ int bbin(int *tabla,int P,int U,int clave,int *ppos){
   return NO_ENCONTRADO;
 }
 
+/**
+ *  Funcion: blin
+ *              Busqueda lineal de una clave en una tabla
+ */
 int blin(int *tabla,int P,int U,int clave,int *ppos){
   int i = 0;
   int ob = 0;
@@ -178,6 +208,9 @@ int blin(int *tabla,int P,int U,int clave,int *ppos){
       return ob;
     }
     i++;
+
+	if(i >= U) 
+		return NO_ENCONTRADO;
   }
 
   *ppos = NO_ENCONTRADO;
@@ -185,7 +218,10 @@ int blin(int *tabla,int P,int U,int clave,int *ppos){
   return NO_ENCONTRADO;
 }
 
-
+/**
+ *  Funcion: ini_diccionario
+ *               Busqueda lineal autoorganizada de una clave en una tabla
+ */
 int blin_auto(int *tabla,int P,int U,int clave,int *ppos){
   int ob = 0;
   int i = 0;
@@ -206,6 +242,9 @@ int blin_auto(int *tabla,int P,int U,int clave,int *ppos){
       return ob;
     }
     i++;
+
+	if(i >= U) 
+		return NO_ENCONTRADO;
   }
 
   *ppos = NO_ENCONTRADO;
